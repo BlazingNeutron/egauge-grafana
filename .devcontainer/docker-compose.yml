@@ -1,0 +1,50 @@
+services:
+  dev:
+    image: mcr.microsoft.com/devcontainers/python:2-3.14-trixie
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+
+  grafana:
+    image: grafana/grafana
+    container_name: dev_grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=grafana
+    volumes:
+      - ./grafana/grafana.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/data:/var/lib/grafana
+  
+  prometheus:
+    image: prom/prometheus
+    container_name: dev_prometheus
+    ports:
+      - "9090:9090"
+    restart: always
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
+  
+  alert-manager:
+    image: prom/alertmanager
+    container_name: dev_alert-manager
+    ports:
+      - "9093:9093"
+    restart: always
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    environment:
+     - GF_SERVER_ROOT_URL=http://dev_grafana:3000/grafana/
+
+  mail:
+    container_name: dev-mail
+    image: inbucket/inbucket:3.0.3
+    ports:
+      - '2500:2500' # SMTP
+      - '9000:9000' # web interface
+      - '1100:1100' # POP3
