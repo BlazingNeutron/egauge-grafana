@@ -1,0 +1,36 @@
+{
+    "polling_interval": 30,
+    "workers": 8,
+    "metrics": [
+        {
+            "type": "gauge",
+            "name": "egauge_voltage_volts",
+            "description": "Voltage reading",
+            "labels": [
+                "device"
+            ]
+        }
+    ],
+    "devices": [
+        {
+            "name": "Device 1",
+            "id": "egauge000001",
+            "metrics": [
+                {
+                    "name": "egauge_voltage_volts",
+                    "value": "V1"
+                }
+            ]
+        },
+        {
+            "name": "Device 2",
+            "id": "egauge000007",
+            "metrics": [
+                {
+                    "name": "egauge_voltage_volts",
+                    "value": "V1"
+                }
+            ]
+        }
+    ]
+}

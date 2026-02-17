@@ -12,8 +12,11 @@ services:
       context: ..
       dockerfile: docker/polling/Dockerfile
     restart: unless-stopped
+    environment:
+      EGAUGE_USER: ${EGAUGE_USER}
+      EGAUGE_PASSWORD: ${EGAUGE_PASSWORD}
     volumes:
-      - ./config.json:/app/config.json
+      - config.json:/app/config.json
 
   postgres:
     image: postgres
@@ -21,27 +24,27 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_DB: grafana
-      POSTGRES_USER: grafana_user
-      POSTGRES_PASSWORD: secret_password
+      POSTGRES_USER: ${GRAFANA_DB_USER}
+      POSTGRES_PASSWORD: ${GRAFANA_DB_PASSWORD}
     volumes:
       - pg_data:/var/lib/postgresql
 
   grafana:
     image: grafana/grafana
-    container_name: dev_grafana
+    container_name: grafana
     depends_on:
       - postgres
     ports:
-      - "3000:3000"
+      - "${GRAFANA_PORT:-3000}:3000"
     restart: unless-stopped
     environment:
       GF_DATABASE_TYPE: postgres
       GF_DATABASE_HOST: postgres:5432
       GF_DATABASE_NAME: grafana
-      GF_DATABASE_USER: grafana_user
-      GF_DATABASE_PASSWORD: secret_password
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: grafana
+      GF_DATABASE_USER: ${GRAFANA_DB_USER}
+      GF_DATABASE_PASSWORD: ${GRAFANA_DB_PASSWORD}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
     volumes:
       - ./grafana/grafana.yml:/etc/grafana/provisioning/datasources/datasource.yml
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
@@ -50,12 +53,12 @@ services:
   
   prometheus:
     image: prom/prometheus
-    container_name: dev_prometheus
+    container_name: prometheus
     depends_on:
       - postgres
       - grafana
     ports:
-      - "9090:9090"
+      - "${PROMETHEUS_PORT:-9090}:9090"
     restart: always
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
@@ -63,25 +66,25 @@ services:
   
   alert-manager:
     image: prom/alertmanager
-    container_name: dev_alert-manager
+    container_name: alert-manager
     depends_on:
       - postgres
       - grafana
     ports:
-      - "9093:9093"
+      - "${ALERT_MANAGER_PORT:-9093}:9093"
     restart: always
     volumes:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     environment:
-     - GF_SERVER_ROOT_URL=http://dev_grafana:3000/grafana/
+     - GF_SERVER_ROOT_URL=http://grafana:3000/grafana/
 
   mail:
-    container_name: dev-mail
+    container_name: mail
     image: inbucket/inbucket:3.0.3
     ports:
-      - '2500:2500' # SMTP
-      - '9000:9000' # web interface
-      - '1100:1100' # POP3
+      - '${SMTP_PORT:-2500}:2500' # SMTP
+      - '${MAIL_UI_PORT:-9000}:9000' # web interface
+      - '${POP3_PORT:-1100}:1100' # POP3
 
 volumes:
   pg_data:
