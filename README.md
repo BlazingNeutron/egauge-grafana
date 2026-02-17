@@ -1,2 +1,2 @@
-# eguage-grafana
-Connecting eGauage device output to Grafana
+# egauge-grafana
+Connecting eGauge device output to Grafana

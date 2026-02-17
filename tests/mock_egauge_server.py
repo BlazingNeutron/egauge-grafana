@@ -8,7 +8,7 @@ app = Flask(__name__)
 def _random_float(min_val: float, max_val: float) -> float:
     return round(random.uniform(min_val, max_val), 2)
 
-def generate_eguage_payload() -> dict:
+def generate_egauge_payload() -> dict:
     now = datetime.now(timezone.utc).isoformat()
     return {
         "ts": now,
@@ -22,7 +22,7 @@ def generate_eguage_payload() -> dict:
 
 @app.route("/api/register", methods=["GET"])
 def egauge_json():
-    payload = generate_eguage_payload()
+    payload = generate_egauge_payload()
     return jsonify(payload)
 
 

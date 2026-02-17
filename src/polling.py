@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+import sys, os, json
 import time
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -11,38 +11,29 @@ from prometheus_client import start_http_server, Gauge, Counter
 
 POLL_INTERVAL = 30
 MAX_WORKERS = 8
+USER = os.environ.get('EGAUGE_USER', "user")
+PASSWORD = os.environ.get('EGAUGE_PASSWORD', "fake_password")
 
-voltage_gauge = Gauge(
-    "egauge_voltage_volts",
-    "Voltage reading per phase",
-    ["device", "phase"]
-)
+METRICS : dict[str, object] = {}
 
-current_gauge = Gauge(
-    "egauge_current_amperes",
-    "Current reading per phase",
-    ["device", "phase"]
-)
+def build_metrics(metrics):
+    for metric_def in metrics:
+        name = metric_def["name"]
+        desc = metric_def["description"]
+        labels = metric_def["labels"]
+        if metric_def["type"].strip().lower() == "gauge":
+            metric = Gauge(name=name, 
+                documentation=desc,
+                labelnames=labels)
+        METRICS[name] = metric
 
-power_gauge = Gauge(
-    "egauge_power_watts",
-    "Real power per phase",
-    ["device", "phase"]
-)
-
-energy_counter = Gauge(
-    "egauge_energy_wh",
-    "Cumulative energy (watt-hours)",
-    ["device"]
-)
-
-def poll_device():
+def poll_device(device):
     """Retrieve JSON from an eGauge unit and push values to Prometheus."""
-    dev = webapi.device.Device("http://127.0.0.1:5000", webapi.JWTAuth("user", "password"))
+    # TODO device URL changes per device in format http://{device_id}.local/
+    dev = webapi.device.Device("http://127.0.0.1:5000", webapi.JWTAuth(USER, PASSWORD))
+    print(device)
     ret = Register(dev, {"rate": "", "time": "now,som"})
-
     ts = ret.ts
-
     if ts is None:
         print("Failed to get register data.", file=sys.stderr)
         sys.exit(1)
@@ -56,20 +47,33 @@ def poll_device():
             print(f"Failed to get rate for register {regname}.", file=sys.stderr)
             sys.exit(1)
         line += f" {rate.value:12.3f} {rate.unit}"
-        if regname == "V1":
-            voltage_gauge.labels("device_name1", "phase_id1").set(rate.value)
-        if regname == "grid":
-            current_gauge.labels("device_name1", "phase_id1").set(rate.value)
-        if regname == "temp":
-            power_gauge.labels("device_name1", "phase_id1").set(rate.value)
-        if regname == "mask":
-            energy_counter.labels("device_name1").set(rate.value)
+
+        for metric in device["metrics"]:
+            reg_name = metric["value"]
+            if regname == reg_name:
+                METRICS[metric["name"]].labels(device["name"]).set(rate.value)
+                    
         print(line)
 
 
 def main():
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)s %(message)s")
+    
+    with open('config.json') as f:
+        config = json.load(f)
+    
+    POLL_INTERVAL = config.get("polling_interval", 30)
+    MAX_WORKERS = config.get("workers", 8)
+    devices = config["devices"]
+    # TODO if devices is null exit
+    if devices is None or len(devices) == 0:
+        logging.error("You need to config at least one device!")
+        sys.exit("No devices found in config.json")
+    else:
+        print(devices)
+
+    build_metrics(config["metrics"])
 
     # Start Prometheus
     start_http_server(8000)
@@ -77,7 +81,10 @@ def main():
     executor = ThreadPoolExecutor(max_workers=MAX_WORKERS)
 
     while True:
-        futures = {executor.submit(poll_device)}
+        futures = {
+            executor.submit(poll_device, device)
+            for device in devices
+        }
         for future in as_completed(futures):
             try:
                 future.result()
