@@ -2,5 +2,7 @@
 	"name": "eGauge - Grafana",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "dev",
-	"workspaceFolder": "/workspace"
+	"workspaceFolder": "/workspace",
+	"postStartCommand": "pip install --upgrade pip",
+	"remoteUser": "dev"
 }
