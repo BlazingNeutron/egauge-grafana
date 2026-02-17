@@ -1,16 +1,16 @@
 services:
-  mockdevice:
+  mockegauge:
     image: ghcr.io/blazingneutron/mock-egauge:latest
     build:
-      context: .
-      dockerfile: mockdevice/Dockerfile
+      context: ..
+      dockerfile: docker/mockegauge/Dockerfile
     restart: unless-stopped
     
   app:
     image: ghcr.io/blazingneutron/egauge-polling:latest
     build:
-      context: .
-      dockerfile: polling/Dockerfile
+      context: ..
+      dockerfile: docker/polling/Dockerfile
     restart: unless-stopped
     volumes:
       - ./config.json:/app/config.json
