@@ -4,5 +4,22 @@
 	"service": "dev",
 	"workspaceFolder": "/workspace",
 	"postStartCommand": "pip install --upgrade pip",
-	"remoteUser": "dev"
+	"remoteUser": "dev",
+	"customizations": {
+		"vscodium": {
+			"registries": {
+				"openvsx": {
+					"url": "https://open-vsx.org/vscode/gallery",
+					// Random headers you'd like to add to all registry requests.
+					"headers": {
+						"Accept": "application/json",
+					},
+				}
+			},
+			"extensions": {
+				"ms-python.python": {},
+				"ms-python.debugpy": {}
+			}
+		}
+	}
 }
