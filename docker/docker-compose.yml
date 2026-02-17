@@ -5,7 +5,7 @@ services:
       context: ..
       dockerfile: docker/mockegauge/Dockerfile
     restart: unless-stopped
-    
+
   app:
     image: ghcr.io/blazingneutron/egauge-polling:latest
     build:
@@ -16,7 +16,7 @@ services:
       EGAUGE_USER: ${EGAUGE_USER}
       EGAUGE_PASSWORD: ${EGAUGE_PASSWORD}
     volumes:
-      - config.json:/app/config.json
+      - ./config.json:/app/config.json
 
   postgres:
     image: postgres

@@ -14,4 +14,4 @@ COPY src/ .
 
 EXPOSE 5000
 
-CMD ["python", "-u", "app.py"]
+CMD ["python", "-u", "polling.py"]
