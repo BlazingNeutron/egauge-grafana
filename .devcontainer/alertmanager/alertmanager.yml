@@ -9,10 +9,11 @@ route:
 receivers:
   - name: 'Mail Alert'
     email_configs:
-      - smarthost: 'dev-mail:2500'
+      - smarthost: 'mail:2500'
         auth_username: 
         auth_password: 
         from: 'alert-manager@alert.com'
         to: 'fake@example.com'
+        require_tls: false
         headers:
           subject: 'Prometheus Mail Alerts'

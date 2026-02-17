@@ -10,15 +10,15 @@
 			"registries": {
 				"openvsx": {
 					"url": "https://open-vsx.org/vscode/gallery",
-					// Random headers you'd like to add to all registry requests.
 					"headers": {
-						"Accept": "application/json",
-					},
+						"Accept": "application/json"
+					}
 				}
 			},
 			"extensions": {
-				"ms-python.python": {},
-				"ms-python.debugpy": {}
+				"ms-python.debugpy": {},
+				"ms-python.vscode-python-envs": {},
+        		"ms-python.python": {}
 			}
 		}
 	}
