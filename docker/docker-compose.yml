@@ -1,0 +1,88 @@
+services:
+  mockdevice:
+    image: ghcr.io/blazingneutron/mock-egauge:latest
+    build:
+      context: .
+      dockerfile: mockdevice/Dockerfile
+    restart: unless-stopped
+    
+  app:
+    image: ghcr.io/blazingneutron/egauge-polling:latest
+    build:
+      context: .
+      dockerfile: polling/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./config.json:/app/config.json
+
+  postgres:
+    image: postgres
+    container_name: grafana-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: grafana
+      POSTGRES_USER: grafana_user
+      POSTGRES_PASSWORD: secret_password
+    volumes:
+      - pg_data:/var/lib/postgresql
+
+  grafana:
+    image: grafana/grafana
+    container_name: dev_grafana
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    environment:
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: postgres:5432
+      GF_DATABASE_NAME: grafana
+      GF_DATABASE_USER: grafana_user
+      GF_DATABASE_PASSWORD: secret_password
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: grafana
+    volumes:
+      - ./grafana/grafana.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - grafana_data:/var/lib/grafana
+  
+  prometheus:
+    image: prom/prometheus
+    container_name: dev_prometheus
+    depends_on:
+      - postgres
+      - grafana
+    ports:
+      - "9090:9090"
+    restart: always
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
+  
+  alert-manager:
+    image: prom/alertmanager
+    container_name: dev_alert-manager
+    depends_on:
+      - postgres
+      - grafana
+    ports:
+      - "9093:9093"
+    restart: always
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    environment:
+     - GF_SERVER_ROOT_URL=http://dev_grafana:3000/grafana/
+
+  mail:
+    container_name: dev-mail
+    image: inbucket/inbucket:3.0.3
+    ports:
+      - '2500:2500' # SMTP
+      - '9000:9000' # web interface
+      - '1100:1100' # POP3
+
+volumes:
+  pg_data:
+  grafana_data:
