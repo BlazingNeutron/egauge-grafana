@@ -30,7 +30,7 @@ def build_metrics(metrics):
 def poll_device(device):
     """Retrieve JSON from an eGauge unit and push values to Prometheus."""
     # TODO device URL changes per device in format http://{device_id}.local/
-    dev = webapi.device.Device("http://mockegauge:5000", webapi.JWTAuth(USER, PASSWORD))
+    dev = webapi.device.Device("http://" + device["id"] + ".local:5000", webapi.JWTAuth(USER, PASSWORD))
     print(device)
     ret = Register(dev, {"rate": "", "time": "now,som"})
     ts = ret.ts

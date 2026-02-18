@@ -6,6 +6,14 @@ services:
     volumes:
       - ..:/workspace:cached
     command: sleep infinity
+    extra_hosts:
+      egauge000001.local: 127.0.0.1
+      egauge000002.local: 127.0.0.1
+      egauge000003.local: 127.0.0.1
+      egauge000004.local: 127.0.0.1
+      egauge000005.local: 127.0.0.1
+      egauge000006.local: 127.0.0.1
+      egauge000007.local: 127.0.0.1
 
   postgres:
     image: postgres
