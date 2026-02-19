@@ -26,4 +26,4 @@ jobs:
       - name: Test with pytest
         run: |
           pip install pytest pytest-cov
-          pytest tests.py --junitxml=coverage/junit/test-results.xml --cov=egaugepolling --cov-report=xml --cov-report=html
+          pytest --junitxml=coverage/junit/test-results.xml --cov=egaugepolling --cov-report=xml --cov-report=html
