@@ -1,8 +1,8 @@
 groups:
- - name: egauge
-   rules:
-   - alert: InstanceDown
-     expr: up == 0
-     for: 30s
-     labels:
+  - name: egauge
+    rules:
+    - alert: InstanceDown
+      expr: up == 0
+      for: 30s
+      labels:
       severity: critical

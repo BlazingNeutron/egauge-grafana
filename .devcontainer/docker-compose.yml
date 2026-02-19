@@ -73,7 +73,7 @@ services:
     volumes:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     environment:
-     - GF_SERVER_ROOT_URL=http://dev_grafana:3000/grafana/
+      - GF_SERVER_ROOT_URL=http://dev_grafana:3000/grafana/
 
   mail:
     container_name: dev-mail
@@ -82,6 +82,8 @@ services:
       - '2500:2500' # SMTP
       - '9000:9000' # web interface
       - '1100:1100' # POP3
+    environment:
+      INBUCKET_WEB_BASEPATH: "/mail"
 
 volumes:
   pg_data:

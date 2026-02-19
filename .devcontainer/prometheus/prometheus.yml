@@ -11,6 +11,6 @@ rule_files:
   - rules.yml
 alerting:
   alertmanagers:
-   - static_configs:
-     - targets:
+    - static_configs:
+      - targets:
         - dev_alert-manager:9093

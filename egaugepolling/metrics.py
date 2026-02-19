@@ -1,7 +1,8 @@
 from prometheus_client import Gauge, Counter
 
+
 class Metrics:
-    __METRICS : dict[str, object] = {}
+    __METRICS: dict[str, object] = {}
 
     def __init__(self):
         self.__METRICS = {}
@@ -13,15 +14,11 @@ class Metrics:
             labels = metric_def["labels"]
             metric = None
             if metric_def["type"].strip().lower() == "gauge":
-                metric = Gauge(name=name, 
-                    documentation=desc,
-                    labelnames=labels)
+                metric = Gauge(name=name, documentation=desc, labelnames=labels)
             if metric_def["type"].strip().lower() == "counter":
-                metric = Counter(name=name, 
-                    documentation=desc,
-                    labelnames=labels)
+                metric = Counter(name=name, documentation=desc, labelnames=labels)
             if metric is not None:
                 self.__METRICS[name] = metric
-    
+
     def get_metrics(self) -> dict[str, object]:
         return self.__METRICS
