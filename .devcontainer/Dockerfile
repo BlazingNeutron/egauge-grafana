@@ -19,4 +19,4 @@ RUN useradd -m dev && echo "dev ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN usermod -s /bin/bash dev
 USER dev
 
-RUN python -m pip install --upgrade pip setuptools
+RUN python -m pip install --upgrade pip setuptools pytest pytest-cov

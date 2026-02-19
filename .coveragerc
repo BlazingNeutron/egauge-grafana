@@ -1,0 +1,9 @@
+[run]
+branch = True
+source = egaugepolling
+
+[report]
+ignore_errors = True
+
+[html]
+directory = coverage
