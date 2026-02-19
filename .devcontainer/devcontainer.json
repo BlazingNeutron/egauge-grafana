@@ -6,20 +6,13 @@
 	"postStartCommand": "pip install --upgrade pip",
 	"remoteUser": "dev",
 	"customizations": {
-		"vscodium": {
-			"registries": {
-				"openvsx": {
-					"url": "https://open-vsx.org/vscode/gallery",
-					"headers": {
-						"Accept": "application/json"
-					}
-				}
-			},
-			"extensions": {
-				"ms-python.debugpy": {},
-				"ms-python.vscode-python-envs": {},
-        		"ms-python.python": {}
-			}
+		"vscode": {
+			"extensions": [
+				"ms-python.debugpy",
+				"ms-python.vscode-python-envs",
+        		"ms-python.python",
+				"editorconfig.editorconfig"
+			]
 		}
 	}
 }
