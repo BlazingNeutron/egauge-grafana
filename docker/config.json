@@ -1,11 +1,21 @@
 {
-    "polling_interval": 30,
+    "polling_interval": 5,
     "workers": 8,
     "metrics": [
         {
+            "id": "egauge_voltage",
             "type": "gauge",
-            "name": "egauge_voltage_volts",
+            "name": "eGauge Voltage",
             "description": "Voltage reading",
+            "labels": [
+                "device"
+            ]
+        },
+        {
+            "id": "egauge_temperature",
+            "type": "gauge",
+            "name": "eGauge Temp",
+            "description": "Temperature reading",
             "labels": [
                 "device"
             ]
@@ -17,18 +27,26 @@
             "id": "egauge000001",
             "metrics": [
                 {
-                    "name": "egauge_voltage_volts",
+                    "id": "egauge_voltage",
                     "value": "V1"
+                },
+                {
+                    "id": "egauge_temperature",
+                    "value": "temp"
                 }
             ]
         },
         {
-            "name": "Device 7",
-            "id": "egauge000007",
+            "name": "Device 2",
+            "id": "egauge000002",
             "metrics": [
                 {
-                    "name": "egauge_voltage_volts",
+                    "id": "egauge_voltage",
                     "value": "V1"
+                },
+                {
+                    "id": "egauge_temperature",
+                    "value": "temp"
                 }
             ]
         }

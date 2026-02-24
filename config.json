@@ -3,7 +3,7 @@
     "workers": 8,
     "metrics": [
         {
-            "id": "egauge_voltage_volts",
+            "id": "egauge_voltage",
             "type": "gauge",
             "name": "eGauge Voltage",
             "description": "Voltage reading",
@@ -27,7 +27,7 @@
             "id": "egauge000001",
             "metrics": [
                 {
-                    "id": "egauge_voltage_volts",
+                    "id": "egauge_voltage",
                     "value": "V1"
                 },
                 {
@@ -41,7 +41,7 @@
             "id": "egauge000007",
             "metrics": [
                 {
-                    "id": "egauge_voltage_volts",
+                    "id": "egauge_voltage",
                     "value": "V1"
                 },
                 {

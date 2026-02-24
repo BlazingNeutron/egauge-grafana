@@ -1,16 +1,11 @@
 services:
   mockegauge:
     image: ghcr.io/blazingneutron/mock-egauge:latest
-    build:
-      context: ..
-      dockerfile: docker/mockegauge/Dockerfile
     restart: unless-stopped
+    profiles: [debug]
 
   app:
     image: ghcr.io/blazingneutron/egauge-polling:latest
-    build:
-      context: ..
-      dockerfile: docker/polling/Dockerfile
     restart: unless-stopped
     environment:
       EGAUGE_USER: ${EGAUGE_USER}
@@ -50,7 +45,7 @@ services:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
       - grafana_data:/var/lib/grafana
-  
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -63,7 +58,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/rules.yml:/etc/prometheus/rules.yml
-  
+
   alert-manager:
     image: prom/alertmanager
     container_name: alert-manager
@@ -85,6 +80,7 @@ services:
       - '${SMTP_PORT:-2500}:2500' # SMTP
       - '${MAIL_UI_PORT:-9000}:9000' # web interface
       - '${POP3_PORT:-1100}:1100' # POP3
+    profiles: [debug]
 
 volumes:
   pg_data:
