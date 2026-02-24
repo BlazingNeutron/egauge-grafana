@@ -1,7 +1,7 @@
-import logging, os, json
+import logging, os, json, sys
 from prometheus_client import start_http_server
 from egauge import webapi
-from metrics import Metrics
+from egaugepolling.metrics import Metrics
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,13 +28,15 @@ class Config:
         self.__URL_TEMPLATE = config.get("url", self.__URL_TEMPLATE)
         self.POLL_INTERVAL = config.get("polling_interval", self.POLL_INTERVAL)
         self.MAX_WORKERS = config.get("workers", self.MAX_WORKERS)
-        self.devices = config["devices"]
-
+        if "devices" in config:
+            self.devices = config["devices"]
         if self.devices is None or len(self.devices) == 0:
             logging.fatal("You need to config at least one device!")
             sys.exit("No devices found in config.json")
 
-        metricsConfig = config["metrics"]
+        metricsConfig = None
+        if "metrics" in config:
+            metricsConfig = config["metrics"]
         if metricsConfig is None or len(metricsConfig) == 0:
             logging.fatal("You need to config at least one metric!")
             sys.exit("No metrics found in config.json")

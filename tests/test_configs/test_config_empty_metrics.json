@@ -1,0 +1,36 @@
+{
+    "polling_interval": 5,
+    "workers": 8,
+    "url": "http://{}/test",
+    "metrics": [],
+    "devices": [
+        {
+            "name": "Device 1",
+            "id": "egauge000001",
+            "metrics": [
+                {
+                    "id": "egauge_voltage_volts",
+                    "value": "V1"
+                },
+                {
+                    "id": "egauge_temperature",
+                    "value": "temp"
+                }
+            ]
+        },
+        {
+            "name": "Device 7",
+            "id": "egauge000007",
+            "metrics": [
+                {
+                    "id": "egauge_voltage_volts",
+                    "value": "V1"
+                },
+                {
+                    "id": "egauge_temperature",
+                    "value": "temp"
+                }
+            ]
+        }
+    ]
+}

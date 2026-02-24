@@ -1,0 +1,26 @@
+{
+    "polling_interval": 5,
+    "workers": 8,
+    "url": "http://{}/test",
+    "metrics": [
+        {
+            "id": "egauge_voltage_volts",
+            "type": "gauge",
+            "name": "eGauge Voltage",
+            "description": "Voltage reading",
+            "labels": [
+                "device"
+            ]
+        },
+        {
+            "id": "egauge_temperature",
+            "type": "gauge",
+            "name": "eGauge Temp",
+            "description": "Temperature reading",
+            "labels": [
+                "device"
+            ]
+        }
+    ],
+    "devices": []
+}
