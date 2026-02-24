@@ -51,7 +51,7 @@ class Config:
             self.__token = webapi.JWTAuth(self.__USER, self.__PASSWORD)
         return self.__token
 
-    def get_metrics(self) -> dic[str, object]:
+    def get_metrics(self) -> dict[str, object]:
         return self.__metrics.get_metrics()
 
     def get_url(self, id):

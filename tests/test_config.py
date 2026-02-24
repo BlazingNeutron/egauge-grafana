@@ -53,6 +53,7 @@ def test_init_config(mockJson, mockOpen, mockOS, full_config_json):
 
     config = Config()
     assert config.get_url("test") == "http://test/test"
+    assert isinstance(config.get_metrics(), dict)
     assert len(config.get_metrics()) == 2
 
 
