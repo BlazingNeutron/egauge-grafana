@@ -2,16 +2,20 @@ import logging, os, json
 from prometheus_client import start_http_server
 from egauge import webapi
 from metrics import Metrics
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class Config:
     POLL_INTERVAL = 30
     MAX_WORKERS = 8
-    __USER = os.environ.get("EGAUGE_USER", "user")
-    __PASSWORD = os.environ.get("EGAUGE_PASSWORD", "fake_password")
+    __USER = os.getenv("EGAUGE_USER", "user")
+    __PASSWORD = os.getenv("EGAUGE_PASSWORD", "fake_password")
     __token = None
     devices = None
     __metrics = None
+    __URL_TEMPLATE = "http://{}.local:5000"
 
     def __init__(self):
         logging.basicConfig(
@@ -21,8 +25,9 @@ class Config:
         with open("config.json") as f:
             config = json.load(f)
 
-        self.POLL_INTERVAL = config.get("polling_interval", 30)
-        self.MAX_WORKERS = config.get("workers", 8)
+        self.__URL_TEMPLATE = config.get("url", self.__URL_TEMPLATE)
+        self.POLL_INTERVAL = config.get("polling_interval", self.POLL_INTERVAL)
+        self.MAX_WORKERS = config.get("workers", self.MAX_WORKERS)
         self.devices = config["devices"]
 
         if self.devices is None or len(self.devices) == 0:
@@ -48,5 +53,4 @@ class Config:
         return self.__metrics.get_metrics()
 
     def get_url(self, id):
-        # TODO make this a config.json prop
-        return f"http://{id}.local:5000"
+        return self.__URL_TEMPLATE.format(id)

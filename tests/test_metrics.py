@@ -18,7 +18,8 @@ def test_build_a_metric():
         [
             {
                 "type": "gauge",
-                "name": "test_gauge",
+                "id": "test_gauge",
+                "name": "Test Gauge",
                 "description": "test desc",
                 "labels": ["test_label"],
             }
@@ -26,8 +27,8 @@ def test_build_a_metric():
     )
     metric_map = testmetric.get_metrics()
     assert metric_map is not None
-    assert metric_map["test_gauge"] is not None
-    assert isinstance(metric_map["test_gauge"], Gauge)
+    assert metric_map["Test Gauge"] is not None
+    assert isinstance(metric_map["Test Gauge"], Gauge)
 
 
 @pytest.mark.usefixtures("before_each_test")
@@ -37,7 +38,8 @@ def test_counter_metric():
         [
             {
                 "type": "COUNTER",
-                "name": "test_counter",
+                "id": "test_counter",
+                "name": "Test Counter",
                 "description": "test desc",
                 "labels": ["test_label"],
             }
@@ -45,8 +47,8 @@ def test_counter_metric():
     )
     metric_map = testmetric.get_metrics()
     assert metric_map is not None
-    assert metric_map["test_counter"] is not None
-    assert isinstance(metric_map["test_counter"], Counter)
+    assert metric_map["Test Counter"] is not None
+    assert isinstance(metric_map["Test Counter"], Counter)
 
 
 @pytest.mark.usefixtures("before_each_test")
@@ -56,18 +58,18 @@ def test_metrics_labels():
         [
             {
                 "type": "COUNTER",
-                "name": "test_counter",
+                "id": "test_counter",
+                "name": "Test Counter",
                 "description": "test desc",
                 "labels": ["test_label1", "test_label2"],
             }
         ]
     )
     metric_map = testmetric.get_metrics()
-    # c = Counter("na", "desc", ["l1", "l2"])
     assert metric_map is not None
-    assert metric_map["test_counter"] is not None
-    assert isinstance(metric_map["test_counter"], Counter)
-    assert len(metric_map["test_counter"]._labelnames) == 2
+    assert metric_map["Test Counter"] is not None
+    assert isinstance(metric_map["Test Counter"], Counter)
+    assert len(metric_map["Test Counter"]._labelnames) == 2
 
 
 @pytest.mark.usefixtures("before_each_test")
@@ -77,7 +79,8 @@ def test_type_misspelled():
         [
             {
                 "type": "gOuge",
-                "name": "test_gauge",
+                "id": "test_gauge",
+                "name": "Test Gauge",
                 "description": "test desc",
                 "labels": ["test_label"],
             }

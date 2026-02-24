@@ -3,7 +3,7 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "dev",
 	"workspaceFolder": "/workspace",
-	"postStartCommand": "pip install --upgrade pip",
+	"postStartCommand": "pip install --upgrade pip && pip install -r requirements.txt",
 	"remoteUser": "dev",
 	"customizations": {
 		"vscode": {

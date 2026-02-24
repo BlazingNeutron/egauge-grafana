@@ -1,6 +1,5 @@
 import sys, time, logging, requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
 from egauge.webapi.device import PhysicalQuantity, Register, UnitSystem
 from egauge import webapi
 from config import Config
@@ -30,14 +29,14 @@ def poll_device(device):
             f"Polling on {device['name']} returned {regname} with {rate.value:12.3f} {rate.unit}"
         )
         for metric in device["metrics"]:
-            reg_name = metric["value"]
-            if regname == reg_name:
+            promMetric = config.get_metrics()[regname]
+            reg_name = metric["name"]
+
+            if promMetric._name == reg_name:
                 logging.info(
                     f"Found '{metric['name']}' metric for {device['name']} - set {rate.value}"
                 )
-                config.get_metrics()[metric["name"]].labels(device["name"]).set(
-                    rate.value
-                )
+                config.get_metrics()[regname].labels(device["name"]).set(rate.value)
 
 
 def main_loop(executor):
