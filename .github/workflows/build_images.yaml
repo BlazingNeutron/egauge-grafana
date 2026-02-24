@@ -1,0 +1,45 @@
+name: Build Docker Images
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build_images:
+    runs-on: ubuntu-latest
+    name: Build and push images
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build egaugepolling image
+        uses: docker/build-push-action@v6.5.0
+        with:
+          context: .
+          file: ./docker/polling/Dockerfile
+          tags: ghcr.io/blazingneutron/egauge-polling:${{ github.sha }},ghcr.io/blazingneutron/egauge-polling:latest
+          push: true
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:latest
+          cache-to: type=inline
+      - name: Build mock-egauge image
+        uses: docker/build-push-action@v6.5.0
+        with:
+          context: .
+          file: ./docker/mockegauge/Dockerfile
+          tags: ghcr.io/blazingneutron/mock-egauge:${{ github.sha }},ghcr.io/blazingneutron/mock-egauge:latest
+          push: true
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:latest
+          cache-to: type=inline
