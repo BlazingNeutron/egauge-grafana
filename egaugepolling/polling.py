@@ -1,9 +1,15 @@
 import sys, time, logging, requests
+from pathlib import Path
+import sys
+
+path_root = Path(__file__).parents[1]
+sys.path.append(str(path_root))
+
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from egauge.webapi.device import PhysicalQuantity, Register, UnitSystem
 from egauge import webapi
-from config import Config
-from metrics import Metrics
+from egaugepolling.config import Config
+from egaugepolling.metrics import Metrics
 
 config = None
 
@@ -29,12 +35,15 @@ def poll_device(device):
             f"Polling on {device['name']} returned {regname} with {rate.value:12.3f} {rate.unit}"
         )
         for metric in device["metrics"]:
-            promMetric = config.get_metrics()[regname]
-            reg_name = metric["name"]
+            promMetric = None
+            if regname in config.get_metrics():
+                promMetric = config.get_metrics()[regname]
+            if promMetric is None:
+                continue
 
-            if promMetric._name == reg_name:
+            if promMetric._name == metric["id"]:
                 logging.info(
-                    f"Found '{metric['name']}' metric for {device['name']} - set {rate.value}"
+                    f"Found '{metric['id']}' metric for {device['name']} - set {rate.value}"
                 )
                 config.get_metrics()[regname].labels(device["name"]).set(rate.value)
 

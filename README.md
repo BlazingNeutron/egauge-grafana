@@ -94,39 +94,45 @@ You can use the sample [`.env.sample`](docker/.env.sample) copied to `.env` file
 |:---:|:------|:---|
 |`polling_interval`|How often the eGauge Polling software queries the eGauge CT device in seconds|`5`|
 |`workers`|Maximum threads for the eGauge Polling software to run. Should be limited by CPU Cores, polling over network can be a long process|`8`|
-|`url`|A URL template which substitues in the device `id`. For example a device with `id` of `egauge000001` and a `"url": "http://{}.local:5000"` will result in a URL to the egauge-python WebAPI of `"http://egauge000001.local:5000"`|`"http://{}.local:5000`|
+|`url`|A URL template which substitues in the device `id`. For example a device with `id` of `egauge000001` and a `"url": "http://{}.local:5000"` will result in a URL to the egauge-python WebAPI of `"http://egauge000001.local:5000"`|`"https://{}.egauge.io/"`|
 |`metrics`|Array of JSON Objects describing Prometheus metrics - id, type, name, description and labels are available|See example [metric](#sample-metric)|
 |`devices`|Array of JSON Object describing the eGauge CT device and link to `metrics` ids to submit to Prometheus for this device| See example [device](#sample-device)|
 
 ### Sample Metric
 ```json
-{
-    "id": "egauge_voltage",     // Prometheus acceptable metric id
-    "type": "gauge",            // Prometheus metric type (Gauge, Counter, etc.)
-    "name": "eGauge Voltage",
-    "description": "Voltage reading",
-    "labels": [
-        "device",               // device.name
-        "id"                    // device.id
-    ]
-}
+"metrics": [
+    {
+        "id": "egauge_voltage",     // Prometheus acceptable metric id
+        "type": "gauge",            // Prometheus metric type (Gauge, Counter, etc.)
+        "name": "eGauge Voltage",
+        "description": "Voltage reading",
+        "labels": [
+            "device",               // device.name
+            "id"                    // device.id
+        ]
+    },
+    ...
+],
 ```
 ### Sample Device
 ```json
-{
-    "name": "Device 1",
-    "id": "egauge000001",
-    "metrics": [
-        {
-            "id": "egauge_voltage",
-            "value": "V1"       // eGauge device register type
-        },
-        {
-            "id": "egauge_temperature",
-            "value": "temp"
-        }
-    ]
-}
+"devices":[
+    {
+        "name": "Device 1",
+        "id": "egauge000001",
+        "metrics": [
+            {
+                "id": "egauge_voltage",
+                "value": "V1"       // eGauge device register type
+            },
+            {
+                "id": "egauge_temperature",
+                "value": "temp"
+            }
+        ]
+    },
+    ...
+],
 ```
 
 ## License

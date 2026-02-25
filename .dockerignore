@@ -1,0 +1,14 @@
+__pycache__/
+.devcontainer/
+.github/
+.pytest_cache/
+.venv/
+.vscode/
+coverage/
+docker/
+.editorconfig
+.env*
+.gitignore
+.pre-commit-config.yaml
+config.json
+coverage.xml

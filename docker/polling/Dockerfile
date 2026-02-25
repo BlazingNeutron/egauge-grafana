@@ -10,8 +10,8 @@ COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY egaugepolling/ .
+COPY . .
 
 EXPOSE 5000
 
-CMD ["python", "-u", "polling.py"]
+CMD ["python", "-u", "egaugepolling/polling.py"]

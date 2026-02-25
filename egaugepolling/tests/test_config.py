@@ -15,31 +15,35 @@ def before_each_test():
 
 @pytest.fixture
 def full_config_json() -> object:
-    with open("tests/test_configs/test_config_full.json", "r") as f:
+    with open("egaugepolling/tests/test_configs/test_config_full.json", "r") as f:
         return json.load(f)
 
 
 @pytest.fixture
 def no_metrics_config_json() -> object:
-    with open("tests/test_configs/test_config_no_metrics.json", "r") as f:
+    with open("egaugepolling/tests/test_configs/test_config_no_metrics.json", "r") as f:
         return json.load(f)
 
 
 @pytest.fixture
 def no_devices_config_json() -> object:
-    with open("tests/test_configs/test_config_no_devices.json", "r") as f:
+    with open("egaugepolling/tests/test_configs/test_config_no_devices.json", "r") as f:
         return json.load(f)
 
 
 @pytest.fixture
 def empty_metrics_config_json() -> object:
-    with open("tests/test_configs/test_config_empty_metrics.json", "r") as f:
+    with open(
+        "egaugepolling/tests/test_configs/test_config_empty_metrics.json", "r"
+    ) as f:
         return json.load(f)
 
 
 @pytest.fixture
 def empty_devices_config_json() -> object:
-    with open("tests/test_configs/test_config_empty_devices.json", "r") as f:
+    with open(
+        "egaugepolling/tests/test_configs/test_config_empty_devices.json", "r"
+    ) as f:
         return json.load(f)
 
 

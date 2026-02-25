@@ -15,11 +15,12 @@ class Config:
     __token = None
     devices = None
     __metrics = None
-    __URL_TEMPLATE = "http://{}.local:5000"
+    __URL_TEMPLATE = "https://{}.egauge.io/"
 
     def __init__(self):
         logging.basicConfig(
-            level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s"
+            level=os.getenv("LOGLEVEL", "INFO").upper(),
+            format="%(asctime)s %(levelname)s %(message)s",
         )
 
         with open("config.json") as f:
