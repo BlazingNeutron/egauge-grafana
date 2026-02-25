@@ -49,14 +49,14 @@ docker compose up
 
 ## Usage
 
-In this repo's [docker compose](docker/docker-compose.yml) the services are provided and their default ports are:
+In this repo's [docker compose](docker/docker-compose.yml) the services provided are:
 
 - [Prometheus](https://prometheus.io/)
-- Prometheus' [AlertManager](https://github.com/prometheus/alertmanager)
+- Prometheus' [Alert Manager](https://github.com/prometheus/alertmanager)
 - [Grafana](https://grafana.com/)
 - [InBucket](https://inbucket.org/) - for testing alerts via email
 - [Postgres](https://www.postgresql.org/) database
-- [Mock eGauge device](tests/mock_egauge_server.py) built into a Docker image
+- [Mock eGauge device](tests/mock_egauge_server.py)
 - [eGauge polling service](egaugepolling)
 
 These are the URLs when using the default configuration:
@@ -73,7 +73,7 @@ You can use the sample [`.env.sample`](docker/.env.sample) copied to `.env` file
 
 |Env Param|Description|Default|
 |:--------|:----|:----|
-|`COMPOSE_PROFILES`|Remove or set to blank to not start Mock eGauge device and InBucket|`debug`|
+|`COMPOSE_PROFILES`|Remove or set to blank to not start Mock eGauge device and InBucket, use `mail` if you want to keep InBucket|`debug`|
 |`GRAFANA_USER`|Grafana UI Admin username|`admin`|
 |`GRAFANA_PASSWORD`|Grafana UI Admin password|`secretpassword`|
 |`EGAUGE_USER`|eGauge Device username - from mock device any username will do|`user`|
@@ -86,6 +86,7 @@ You can use the sample [`.env.sample`](docker/.env.sample) copied to `.env` file
 |`SMTP_PORT`|InBucket SMTP Port #|`2500`|
 |`MAIL_UI_PORT`|InBucket Web UI Port #|`9000`|
 |`POP3_PORT`|InBucket POP3 Port #|`1100`|
+|`LOGLEVEL`|Python Logging level|`INFO`|
 
 
 ### Config.json Overview
