@@ -10,7 +10,7 @@ COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY tests/mock_egauge_server.py .
+COPY egaugepolling/tests/mock_egauge_server.py .
 
 EXPOSE 5000
 
